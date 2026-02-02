@@ -927,45 +927,55 @@ export default function TeacherDashboard() {
                               </Badge>
                             </div>
                             <p className="text-sm text-gray-600">{session.exam_title}</p>
-                            <div className="flex items-center gap-4 text-xs text-gray-500">
-                              <span>Student ID: {session.student_id}</span>
-                              <span>Started: {new Date(session.start_time).toLocaleTimeString()}</span>
-                              {session.violation_count > 0 && (
-                                <Badge className="bg-red-100 text-red-800">
-                                  <AlertTriangle className="h-3 w-3 mr-1" />
-                                  {session.violation_count} Violation{session.violation_count !== 1 ? "s" : ""}
-                                </Badge>
-                              )}
-                            </div>
-
-                            {/* Expanded Violations View */}
-                            {selectedSession?.id === session.id && (
-                              <div className="mt-4 pt-4 border-t space-y-3">
-                                <h4 className="font-medium text-sm">Violations for this session:</h4>
-                                {violations.filter(v => v.studentName === session.student_name && v.examTitle === session.exam_title).length === 0 ? (
-                                  <p className="text-xs text-gray-500 italic">No violations recorded for this session.</p>
-                                ) : (
-                                  <div className="space-y-2">
-                                    {violations
-                                      .filter(v => v.studentName === session.student_name && v.examTitle === session.exam_title)
-                                      .map((violation) => (
-                                        <div key={violation.id} className="bg-white border border-red-100 rounded p-3 space-y-1">
-                                          <div className="flex items-center gap-2">
-                                            <Badge variant="outline" className="bg-red-50 text-red-800 border-red-200 font-mono text-xs">
-                                              {violation.violationType.replace(/_/g, " ")}
-                                            </Badge>
-                                            <Badge className={getSeverityColor(violation.severity)}>
-                                              {violation.severity.toUpperCase()}
-                                            </Badge>
-                                          </div>
-                                          <p className="text-xs text-gray-700">{violation.description}</p>
-                                          <p className="text-xs text-gray-500">{new Date(violation.timestamp).toLocaleString()}</p>
-                                        </div>
-                                      ))}
+                            {(() => {
+                              // Calculate violations for this session
+                              const sessionViolations = violations.filter(
+                                (v) =>
+                                  v.studentName.toLowerCase() === session.student_name.toLowerCase() &&
+                                  v.examTitle.toLowerCase() === session.exam_title.toLowerCase()
+                              )
+                              return (
+                                <>
+                                  <div className="flex items-center gap-4 text-xs text-gray-500">
+                                    <span>Student ID: {session.student_id}</span>
+                                    <span>Started: {new Date(session.start_time).toLocaleTimeString()}</span>
+                                    {sessionViolations.length > 0 && (
+                                      <Badge className="bg-red-100 text-red-800">
+                                        <AlertTriangle className="h-3 w-3 mr-1" />
+                                        {sessionViolations.length} Violation{sessionViolations.length !== 1 ? "s" : ""}
+                                      </Badge>
+                                    )}
                                   </div>
-                                )}
-                              </div>
-                            )}
+
+                                  {/* Expanded Violations View */}
+                                  {selectedSession?.id === session.id && (
+                                    <div className="mt-4 pt-4 border-t space-y-3">
+                                      <h4 className="font-medium text-sm">Violations for this session ({sessionViolations.length}):</h4>
+                                      {sessionViolations.length === 0 ? (
+                                        <p className="text-xs text-gray-500 italic">No violations recorded for this session.</p>
+                                      ) : (
+                                        <div className="space-y-2">
+                                          {sessionViolations.map((violation) => (
+                                            <div key={violation.id} className="bg-white border border-red-100 rounded p-3 space-y-1">
+                                              <div className="flex items-center gap-2">
+                                                <Badge variant="outline" className="bg-red-50 text-red-800 border-red-200 font-mono text-xs">
+                                                  {violation.violationType.replace(/_/g, " ")}
+                                                </Badge>
+                                                <Badge className={getSeverityColor(violation.severity)}>
+                                                  {violation.severity.toUpperCase()}
+                                                </Badge>
+                                              </div>
+                                              <p className="text-xs text-gray-700">{violation.description}</p>
+                                              <p className="text-xs text-gray-500">{new Date(violation.timestamp).toLocaleString()}</p>
+                                            </div>
+                                          ))}
+                                        </div>
+                                      )}
+                                    </div>
+                                  )}
+                                </>
+                              )
+                            })()}
                           </div>
                         </div>
                       ))}
