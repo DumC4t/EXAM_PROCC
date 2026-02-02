@@ -38,6 +38,8 @@ interface Student {
   email: string
   student_id: string
   status: "active" | "suspended"
+  teacher_id?: string
+  teacher_name?: string
   created_at: string
 }
 
@@ -279,6 +281,15 @@ export default function AdminPortal() {
 
   const handleEditStudent = async (student: Student) => {
     try {
+      if (!student.teacher_id) {
+        toast({
+          title: "Error",
+          description: "Teacher assignment is required",
+          variant: "destructive",
+        })
+        return
+      }
+
       const response = await fetch(`/api/admin/students/${student.id}`, {
         method: "PUT",
         headers: {
@@ -289,6 +300,7 @@ export default function AdminPortal() {
           email: student.email,
           student_id: student.student_id,
           status: student.status,
+          teacherId: parseInt(student.teacher_id),
         }),
       })
 
@@ -835,6 +847,26 @@ export default function AdminPortal() {
                                         <SelectContent>
                                           <SelectItem value="active">Active</SelectItem>
                                           <SelectItem value="suspended">Suspended</SelectItem>
+                                        </SelectContent>
+                                      </Select>
+                                    </div>
+                                    <div>
+                                      <Label htmlFor="editStudentTeacher">Assigned Teacher *</Label>
+                                      <Select
+                                        value={editingStudent.teacher_id || ""}
+                                        onValueChange={(value) =>
+                                          setEditingStudent({ ...editingStudent, teacher_id: value })
+                                        }
+                                      >
+                                        <SelectTrigger id="editStudentTeacher">
+                                          <SelectValue placeholder="Select a teacher" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                          {teachers.map((teacher) => (
+                                            <SelectItem key={teacher.id} value={teacher.id.toString()}>
+                                              {teacher.name} ({teacher.department})
+                                            </SelectItem>
+                                          ))}
                                         </SelectContent>
                                       </Select>
                                     </div>

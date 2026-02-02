@@ -4,18 +4,28 @@ import { executeQuery } from "@/lib/db"
 export async function PUT(request: NextRequest, { params }: { params: { studentId: string } }) {
   try {
     console.log("Updating student:", params.studentId)
-    const { name, email, student_id, status } = await request.json()
+    const { name, email, student_id, status, teacherId } = await request.json()
 
     if (!name || !email || !student_id) {
       return NextResponse.json({ success: false, message: "Name, email, and student ID are required" }, { status: 400 })
     }
 
+    if (!teacherId) {
+      return NextResponse.json({ success: false, message: "Teacher assignment is required" }, { status: 400 })
+    }
+
+    // Verify teacher exists
+    const teacher = await executeQuery("SELECT id FROM teachers WHERE id = ?", [teacherId])
+    if (!teacher || teacher.length === 0) {
+      return NextResponse.json({ success: false, message: "Invalid teacher ID" }, { status: 400 })
+    }
+
     const query = `
       UPDATE students 
-      SET name = ?, email = ?, student_id = ?, status = ?, updated_at = CURRENT_TIMESTAMP
+      SET name = ?, email = ?, student_id = ?, status = ?, teacher_id = ?, updated_at = CURRENT_TIMESTAMP
       WHERE id = ?
     `
-    const result = await executeQuery(query, [name, email, student_id, status, params.studentId])
+    const result = await executeQuery(query, [name, email, student_id, status, teacherId, params.studentId])
 
     if (result.affectedRows === 0) {
       return NextResponse.json({ success: false, message: "Student not found" }, { status: 404 })
