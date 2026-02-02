@@ -44,12 +44,13 @@ interface Exam {
 
 interface Violation {
   id: string
+  exam_session_id: number | null
   studentName: string
   examTitle: string
   violationType: string
   description: string
+  severity: string
   timestamp: string
-  severity: "low" | "medium" | "high"
 }
 
 interface ExamSession {
@@ -208,6 +209,7 @@ export default function TeacherDashboard() {
       if (violationsData.success && violationsData.violations) {
         const formattedViolations = violationsData.violations.map((violation: any) => ({
           id: violation.id.toString(),
+          exam_session_id: violation.exam_session_id,
           studentName: violation.student_name || "Unknown",
           examTitle: violation.exam_title || "Unknown Exam",
           violationType: violation.violation_type || "UNKNOWN",
@@ -928,11 +930,9 @@ export default function TeacherDashboard() {
                             </div>
                             <p className="text-sm text-gray-600">{session.exam_title}</p>
                             {(() => {
-                              // Calculate violations for this session
+                              // Calculate violations for this session using session ID
                               const sessionViolations = violations.filter(
-                                (v) =>
-                                  v.studentName.toLowerCase() === session.student_name.toLowerCase() &&
-                                  v.examTitle.toLowerCase() === session.exam_title.toLowerCase()
+                                (v) => v.exam_session_id && v.exam_session_id === parseInt(session.id)
                               )
                               return (
                                 <>
