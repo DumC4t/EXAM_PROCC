@@ -1,11 +1,26 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { executeQuery } from "@/lib/db"
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
-    console.log("Fetching all students...")
-    const query = "SELECT * FROM students ORDER BY created_at DESC"
-    const students = await executeQuery(query)
+    console.log("Fetching students...")
+    const { searchParams } = new URL(request.url)
+    const teacherId = searchParams.get("teacherId")
+    const onlyTeacherStudents = searchParams.get("teacherOnly") === "true"
+
+    // If teacherId is provided, filter by that teacher (for admin view or teacher self-serve)
+    // If onlyTeacherStudents is true, enforce teacher filtering (for teacher dashboard)
+    let query = "SELECT s.*, t.name as teacher_name FROM students s LEFT JOIN teachers t ON s.teacher_id = t.id"
+    let params: any[] = []
+
+    if (teacherId) {
+      query += " WHERE s.teacher_id = ?"
+      params = [teacherId]
+    }
+
+    query += " ORDER BY s.created_at DESC"
+
+    const students = await executeQuery(query, params)
 
     return NextResponse.json({
       success: true,
@@ -23,10 +38,20 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     console.log("Creating new student...")
-    const { name, email, studentId, status } = await request.json()
+    const { name, email, studentId, status, teacherId } = await request.json()
 
     if (!name || !email || !studentId) {
       return NextResponse.json({ success: false, message: "Name, email, and student ID are required" }, { status: 400 })
+    }
+
+    if (!teacherId) {
+      return NextResponse.json({ success: false, message: "Teacher assignment is required" }, { status: 400 })
+    }
+
+    // Verify teacher exists
+    const teacher = await executeQuery("SELECT id FROM teachers WHERE id = ?", [teacherId])
+    if (!teacher || teacher.length === 0) {
+      return NextResponse.json({ success: false, message: "Invalid teacher ID" }, { status: 400 })
     }
 
     // Check if student ID already exists
@@ -42,10 +67,10 @@ export async function POST(request: NextRequest) {
     }
 
     const query = `
-      INSERT INTO students (name, email, student_id, status, department, year_level) 
-      VALUES (?, ?, ?, ?, 'General', 1)
+      INSERT INTO students (name, email, student_id, status, department, year_level, teacher_id) 
+      VALUES (?, ?, ?, ?, 'General', 1, ?)
     `
-    const result = await executeQuery(query, [name, email, studentId, status || "active"])
+    const result = await executeQuery(query, [name, email, studentId, status || "active", teacherId])
 
     console.log("Student created successfully:", result)
 

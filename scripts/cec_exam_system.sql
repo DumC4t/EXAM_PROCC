@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 26, 2026 at 09:28 AM
+-- Generation Time: Feb 02, 2026 at 04:14 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -45,31 +45,6 @@ CREATE TABLE `administrators` (
 INSERT INTO `administrators` (`id`, `name`, `email`, `password_hash`, `role`, `status`, `created_at`, `updated_at`) VALUES
 (1, 'System Administrator', 'admin@itproctool.edu', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'super_admin', 'active', '2025-09-25 03:28:10', '2025-09-25 03:28:10'),
 (2, 'IT Admin', 'it.admin@itproctool.edu', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin', 'active', '2025-09-25 03:28:10', '2025-09-25 03:28:10');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `categories`
---
-
-CREATE TABLE `categories` (
-  `id` int(11) NOT NULL,
-  `name` varchar(50) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `categories`
---
-
-INSERT INTO `categories` (`id`, `name`, `created_at`) VALUES
-(1, 'Meals', '2025-10-29 14:58:36'),
-(2, 'Appetizer', '2025-10-29 14:58:36'),
-(3, 'Burger', '2025-10-29 14:58:36'),
-(4, 'Fries', '2025-10-29 14:58:36'),
-(5, 'Noodles', '2025-10-29 14:58:36'),
-(6, 'Canton', '2025-10-29 14:58:36'),
-(7, 'Beverages', '2025-10-29 14:58:36');
 
 -- --------------------------------------------------------
 
@@ -134,176 +109,24 @@ INSERT INTO `exam_sessions` (`id`, `exam_id`, `student_id`, `session_token`, `st
 (6, 4, 1, '4-1-1769415555491', '2026-01-26 08:19:15', NULL, 'active', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36', '2026-01-26 08:19:15'),
 (7, 4, 1, '4-1-1769415648393', '2026-01-26 08:20:48', NULL, 'active', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36', '2026-01-26 08:20:48'),
 (8, 4, 1, '4-1-1769415657114', '2026-01-26 08:20:57', NULL, 'active', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36', '2026-01-26 08:20:57'),
-(9, 4, 1, '4-1-1769415766818', '2026-01-26 08:22:46', NULL, 'active', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36', '2026-01-26 08:22:46');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `inventory`
---
-
-CREATE TABLE `inventory` (
-  `id` int(11) NOT NULL,
-  `menu_item_id` int(11) NOT NULL,
-  `quantity` int(11) DEFAULT 0,
-  `last_updated` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `inventory`
---
-
-INSERT INTO `inventory` (`id`, `menu_item_id`, `quantity`, `last_updated`) VALUES
-(1, 1, 50, '2025-10-29 14:58:36'),
-(2, 2, 40, '2025-10-29 14:58:36'),
-(3, 3, 30, '2025-10-29 14:58:36'),
-(4, 4, 25, '2025-10-29 14:58:36'),
-(5, 5, 35, '2025-10-29 14:58:36'),
-(6, 6, 20, '2025-10-29 14:58:36'),
-(7, 7, 25, '2025-10-29 14:58:36'),
-(8, 8, 15, '2025-10-29 14:58:36'),
-(9, 9, 20, '2025-10-29 14:58:36'),
-(10, 10, 18, '2025-10-29 14:58:36'),
-(11, 11, 22, '2025-10-29 14:58:36'),
-(12, 12, 20, '2025-10-29 14:58:36'),
-(13, 13, 18, '2025-10-29 14:58:36'),
-(14, 14, 22, '2025-10-29 14:58:36'),
-(15, 15, 30, '2025-10-29 14:58:36'),
-(16, 16, 25, '2025-10-29 14:58:36'),
-(17, 17, 20, '2025-10-29 14:58:36'),
-(18, 18, 40, '2025-10-29 14:58:36'),
-(19, 19, 40, '2025-10-29 14:58:36'),
-(20, 20, 35, '2025-10-29 14:58:36'),
-(21, 21, 50, '2025-10-29 14:58:36'),
-(22, 22, 40, '2025-10-29 14:58:36'),
-(23, 23, 50, '2025-10-29 14:58:36'),
-(24, 24, 40, '2025-10-29 14:58:36'),
-(25, 25, 30, '2025-10-29 14:58:36'),
-(26, 26, 30, '2025-10-29 14:58:36'),
-(27, 27, 30, '2025-10-29 14:58:36'),
-(28, 28, 25, '2025-10-29 14:58:36'),
-(29, 29, 25, '2025-10-29 14:58:36'),
-(30, 30, 60, '2025-10-29 14:58:36'),
-(31, 31, 50, '2025-10-29 14:58:36'),
-(32, 32, 40, '2025-10-29 14:58:36'),
-(33, 33, 40, '2025-10-29 14:58:36'),
-(34, 34, 40, '2025-10-29 14:58:36'),
-(35, 35, 40, '2025-10-29 14:58:36'),
-(36, 36, 30, '2025-10-29 14:58:36');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `menu_items`
---
-
-CREATE TABLE `menu_items` (
-  `id` int(11) NOT NULL,
-  `category_id` int(11) NOT NULL,
-  `name` varchar(100) NOT NULL,
-  `price` decimal(10,2) NOT NULL,
-  `available` tinyint(1) DEFAULT 1,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `menu_items`
---
-
-INSERT INTO `menu_items` (`id`, `category_id`, `name`, `price`, `available`, `created_at`) VALUES
-(1, 1, 'Rice', 15.00, 1, '2025-10-29 14:58:36'),
-(2, 1, 'Siomai', 10.00, 1, '2025-10-29 14:58:36'),
-(3, 1, 'Spaghetti', 30.00, 1, '2025-10-29 14:58:36'),
-(4, 1, 'Hotdog', 20.00, 1, '2025-10-29 14:58:36'),
-(5, 1, 'Longganisa', 10.00, 1, '2025-10-29 14:58:36'),
-(6, 1, 'Spam', 20.00, 1, '2025-10-29 14:58:36'),
-(7, 1, 'Chorizo', 20.00, 1, '2025-10-29 14:58:36'),
-(8, 1, 'Porkchop', 60.00, 1, '2025-10-29 14:58:36'),
-(9, 1, 'Chicken Fillet', 55.00, 1, '2025-10-29 14:58:36'),
-(10, 1, 'Fish Fillet', 45.00, 1, '2025-10-29 14:58:36'),
-(11, 1, 'Fried Chicken', 60.00, 1, '2025-10-29 14:58:36'),
-(12, 1, 'Chicken Fillet W/rice', 55.00, 1, '2025-10-29 14:58:36'),
-(13, 1, 'Fish Fillet W/rice', 45.00, 1, '2025-10-29 14:58:36'),
-(14, 1, 'Fried Chicken W/rice', 60.00, 1, '2025-10-29 14:58:36'),
-(15, 2, 'Corn', 10.00, 1, '2025-10-29 14:58:36'),
-(16, 2, 'Banana Chips', 20.00, 1, '2025-10-29 14:58:36'),
-(17, 2, 'Chicharon', 40.00, 1, '2025-10-29 14:58:36'),
-(18, 3, 'W/cheese', 30.00, 1, '2025-10-29 14:58:36'),
-(19, 3, 'W/egg', 30.00, 1, '2025-10-29 14:58:36'),
-(20, 3, 'W/cheese and egg', 40.00, 1, '2025-10-29 14:58:36'),
-(21, 4, 'Regular Cheese', 40.00, 1, '2025-10-29 14:58:36'),
-(22, 4, 'Large Cheese', 60.00, 1, '2025-10-29 14:58:36'),
-(23, 4, 'Regular BBQ', 40.00, 1, '2025-10-29 14:58:36'),
-(24, 4, 'Large BBQ', 60.00, 1, '2025-10-29 14:58:36'),
-(25, 5, 'Jjampong', 40.00, 1, '2025-10-29 14:58:36'),
-(26, 5, 'Sutanghon', 40.00, 1, '2025-10-29 14:58:36'),
-(27, 5, 'Bulalo', 40.00, 1, '2025-10-29 14:58:36'),
-(28, 6, 'Spicy Canton', 30.00, 1, '2025-10-29 14:58:36'),
-(29, 6, 'Calamansi Canton', 30.00, 1, '2025-10-29 14:58:36'),
-(30, 7, 'Water', 20.00, 1, '2025-10-29 14:58:36'),
-(31, 7, 'Water 35', 35.00, 1, '2025-10-29 14:58:36'),
-(32, 7, 'Coke', 25.00, 1, '2025-10-29 14:58:36'),
-(33, 7, 'C2', 25.00, 1, '2025-10-29 14:58:36'),
-(34, 7, 'Sprite', 25.00, 1, '2025-10-29 14:58:36'),
-(35, 7, 'Nestea', 25.00, 1, '2025-10-29 14:58:36'),
-(36, 7, 'Milo', 25.00, 1, '2025-10-29 14:58:36'),
-(37, 7, 'Nescafe', 30.00, 1, '2025-10-29 14:58:36'),
-(38, 2, 'idk', 123.00, 1, '2025-10-29 15:18:38'),
-(39, 1, 'idk', 99.00, 1, '2025-10-30 03:45:29');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `orders`
---
-
-CREATE TABLE `orders` (
-  `id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `order_date` timestamp NOT NULL DEFAULT current_timestamp(),
-  `status` enum('pending','preparing','ready','cancelled') DEFAULT 'pending',
-  `total_price` decimal(10,2) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `orders`
---
-
-INSERT INTO `orders` (`id`, `user_id`, `order_date`, `status`, `total_price`) VALUES
-(1, 2, '2025-10-29 15:05:48', 'pending', 15.00),
-(2, 4, '2025-10-30 03:52:56', 'pending', 10.00),
-(3, 4, '2025-10-30 03:53:44', 'pending', 99.00),
-(4, 4, '2025-10-30 03:55:24', 'pending', 60.00),
-(5, 2, '2025-10-30 03:55:50', 'pending', 99.00),
-(6, 4, '2025-10-30 04:09:52', 'pending', 10.00),
-(7, 4, '2025-10-30 04:10:11', 'pending', 99.00);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `order_items`
---
-
-CREATE TABLE `order_items` (
-  `id` int(11) NOT NULL,
-  `order_id` int(11) NOT NULL,
-  `menu_item_id` int(11) NOT NULL,
-  `quantity` int(11) NOT NULL,
-  `price` decimal(10,2) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `order_items`
---
-
-INSERT INTO `order_items` (`id`, `order_id`, `menu_item_id`, `quantity`, `price`) VALUES
-(1, 1, 1, 1, 15.00),
-(2, 2, 2, 1, 10.00),
-(3, 3, 39, 1, 99.00),
-(4, 4, 14, 1, 60.00),
-(5, 5, 39, 1, 99.00),
-(6, 6, 2, 1, 10.00),
-(7, 7, 39, 1, 99.00);
+(9, 4, 1, '4-1-1769415766818', '2026-01-26 08:22:46', NULL, 'active', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36', '2026-01-26 08:22:46'),
+(10, 4, 1, '4-1-1769526426957', '2026-01-27 15:07:07', NULL, 'active', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36', '2026-01-27 15:07:07'),
+(11, 4, 1, '4-1-1769527512194', '2026-01-27 15:25:12', NULL, 'active', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36', '2026-01-27 15:25:12'),
+(12, 4, 1, '4-1-1769527697328', '2026-01-27 15:28:18', NULL, 'active', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36', '2026-01-27 15:28:18'),
+(13, 4, 1, '4-1-1769527862175', '2026-01-27 15:31:02', NULL, 'active', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36', '2026-01-27 15:31:02'),
+(14, 4, 1, '4-1-1769527906565', '2026-01-27 15:31:46', NULL, 'active', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36', '2026-01-27 15:31:46'),
+(15, 4, 1, '4-1-1769528879527', '2026-01-27 15:48:00', NULL, 'active', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36', '2026-01-27 15:48:00'),
+(16, 4, 1, '4-1-1769529398660', '2026-01-27 15:56:43', NULL, 'active', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36', '2026-01-27 15:56:43'),
+(17, 4, 1, '4-1-1769530920821', '2026-01-27 16:22:01', NULL, 'active', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36', '2026-01-27 16:22:01'),
+(18, 4, 1, '4-1-1769944807228', '2026-02-01 11:20:07', NULL, 'active', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36', '2026-02-01 11:20:07'),
+(19, 4, 1, '4-1-1769944866194', '2026-02-01 11:21:06', '2026-02-01 11:21:27', 'terminated', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36', '2026-02-01 11:21:06'),
+(20, 4, 1, '4-1-1769946317189', '2026-02-01 11:45:18', NULL, 'active', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36', '2026-02-01 11:45:18'),
+(21, 4, 1, '4-1-1769947061919', '2026-02-01 11:57:42', NULL, 'active', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36', '2026-02-01 11:57:42'),
+(22, 4, 1, '4-1-1769947532320', '2026-02-01 12:05:32', NULL, 'active', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36', '2026-02-01 12:05:32'),
+(23, 4, 1, '4-1-1769947559633', '2026-02-01 12:05:59', NULL, 'active', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36', '2026-02-01 12:05:59'),
+(24, 4, 1, '4-1-1769947623406', '2026-02-01 12:07:04', NULL, 'active', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36', '2026-02-01 12:07:04'),
+(25, 4, 1, '4-1-1769947884082', '2026-02-01 12:11:25', NULL, 'active', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36', '2026-02-01 12:11:25'),
+(26, 4, 1, '4-1-1769948526079', '2026-02-01 12:22:06', NULL, 'active', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36', '2026-02-01 12:22:06');
 
 -- --------------------------------------------------------
 
@@ -325,7 +148,7 @@ CREATE TABLE `proctoring_settings` (
 --
 
 INSERT INTO `proctoring_settings` (`id`, `setting_key`, `setting_value`, `description`, `updated_by`, `updated_at`) VALUES
-(1, 'violation_threshold', '3', 'Maximum violations before automatic termination', NULL, '2025-09-25 03:28:10'),
+(1, 'violation_threshold', '5', 'Maximum violations before automatic termination', NULL, '2026-02-01 11:25:37'),
 (2, 'tab_switch_enabled', 'true', 'Enable tab switching detection', NULL, '2025-09-25 03:28:10'),
 (3, 'right_click_disabled', 'true', 'Disable right-click during exams', NULL, '2025-09-25 03:28:10'),
 (4, 'copy_paste_disabled', 'true', 'Disable copy-paste during exams', NULL, '2025-09-25 03:28:10'),
@@ -344,6 +167,7 @@ CREATE TABLE `students` (
   `email` varchar(255) DEFAULT NULL,
   `department` varchar(255) DEFAULT NULL,
   `year_level` int(11) DEFAULT NULL,
+  `teacher_id` int(11) NOT NULL,
   `status` enum('active','inactive','graduated') DEFAULT 'active',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
@@ -353,17 +177,17 @@ CREATE TABLE `students` (
 -- Dumping data for table `students`
 --
 
-INSERT INTO `students` (`id`, `name`, `student_id`, `email`, `department`, `year_level`, `status`, `created_at`, `updated_at`) VALUES
-(1, 'Alice Johnson', 'STU001', 'alice.johnson@student.cec.edu', 'Computer Science', 3, 'active', '2025-09-25 03:28:10', '2025-09-25 03:28:10'),
-(2, 'Bob Wilson', 'STU002', 'bob.wilson@student.cec.edu', 'Information Technology', 2, 'active', '2025-09-25 03:28:10', '2025-09-25 03:28:10'),
-(3, 'Carol Davis', 'STU003', 'carol.davis@student.cec.edu', 'Computer Science', 4, 'active', '2025-09-25 03:28:10', '2025-09-25 03:28:10'),
-(4, 'David Brown', 'STU004', 'david.brown@student.cec.edu', 'Information Technology', 1, 'active', '2025-09-25 03:28:10', '2025-09-25 03:28:10'),
-(5, 'Eva Martinez', 'STU005', 'eva.martinez@student.cec.edu', 'Computer Science', 3, 'active', '2025-09-25 03:28:10', '2025-09-25 03:28:10'),
-(6, 'Frank Taylor', 'STU006', 'frank.taylor@student.cec.edu', 'Computer Engineering', 2, 'active', '2025-09-25 03:28:10', '2025-09-25 03:28:10'),
-(7, 'Grace Lee', 'STU007', 'grace.lee@student.cec.edu', 'Software Engineering', 4, 'active', '2025-09-25 03:28:10', '2025-09-25 03:28:10'),
-(8, 'Henry Chen', 'STU008', 'henry.chen@student.cec.edu', 'Information Technology', 3, 'active', '2025-09-25 03:28:10', '2025-09-25 03:28:10'),
-(9, 'Ivy Rodriguez', 'STU009', 'ivy.rodriguez@student.cec.edu', 'Computer Science', 1, 'active', '2025-09-25 03:28:10', '2025-09-25 03:28:10'),
-(10, 'Jack Thompson', 'STU010', 'jack.thompson@student.cec.edu', 'Computer Engineering', 2, 'active', '2025-09-25 03:28:10', '2025-09-25 03:28:10');
+INSERT INTO `students` (`id`, `name`, `student_id`, `email`, `department`, `year_level`, `teacher_id`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'Alice Johnson', 'STU001', 'alice.johnson@student.cec.edu', 'Computer Science', 3, 1, 'active', '2025-09-25 03:28:10', '2025-09-25 03:28:10'),
+(2, 'Bob Wilson', 'STU002', 'bob.wilson@student.cec.edu', 'Information Technology', 2, 2, 'active', '2025-09-25 03:28:10', '2025-09-25 03:28:10'),
+(3, 'Carol Davis', 'STU003', 'carol.davis@student.cec.edu', 'Computer Science', 4, 1, 'active', '2025-09-25 03:28:10', '2025-09-25 03:28:10'),
+(4, 'David Brown', 'STU004', 'david.brown@student.cec.edu', 'Information Technology', 1, 3, 'active', '2025-09-25 03:28:10', '2025-09-25 03:28:10'),
+(5, 'Eva Martinez', 'STU005', 'eva.martinez@student.cec.edu', 'Computer Science', 3, 1, 'active', '2025-09-25 03:28:10', '2025-09-25 03:28:10'),
+(6, 'Frank Taylor', 'STU006', 'frank.taylor@student.cec.edu', 'Computer Engineering', 2, 2, 'active', '2025-09-25 03:28:10', '2025-09-25 03:28:10'),
+(7, 'Grace Lee', 'STU007', 'grace.lee@student.cec.edu', 'Software Engineering', 4, 3, 'active', '2025-09-25 03:28:10', '2025-09-25 03:28:10'),
+(8, 'Henry Chen', 'STU008', 'henry.chen@student.cec.edu', 'Information Technology', 3, 1, 'active', '2025-09-25 03:28:10', '2025-09-25 03:28:10'),
+(9, 'Ivy Rodriguez', 'STU009', 'ivy.rodriguez@student.cec.edu', 'Computer Science', 1, 2, 'active', '2025-09-25 03:28:10', '2025-09-25 03:28:10'),
+(10, 'Jack Thompson', 'STU010', 'jack.thompson@student.cec.edu', 'Computer Engineering', 2, 3, 'active', '2025-09-25 03:28:10', '2025-09-25 03:28:10');
 
 -- --------------------------------------------------------
 
@@ -417,7 +241,25 @@ INSERT INTO `system_logs` (`id`, `user_type`, `user_id`, `action`, `description`
 (28, 'teacher', 1, 'login', 'Teacher login: teacher@cec.edu', '::1', NULL, '2026-01-21 15:37:29'),
 (29, 'student', 1, 'login', 'Student login: STU001', '::1', NULL, '2026-01-21 15:38:02'),
 (30, 'teacher', 1, 'login', 'Teacher login: teacher@cec.edu', '::1', NULL, '2026-01-26 08:00:43'),
-(31, 'student', 1, 'login', 'Student login: STU001', '::1', NULL, '2026-01-26 08:01:15');
+(31, 'student', 1, 'login', 'Student login: STU001', '::1', NULL, '2026-01-26 08:01:15'),
+(32, 'teacher', 1, 'login', 'Teacher login: teacher@cec.edu', '::1', NULL, '2026-01-27 15:06:43'),
+(33, 'student', 1, 'login', 'Student login: STU001', '::1', NULL, '2026-01-27 15:06:59'),
+(34, 'teacher', 1, 'login', 'Teacher login: teacher@cec.edu', '::1', NULL, '2026-01-27 15:21:30'),
+(35, 'student', 1, 'login', 'Student login: STU001', '::1', NULL, '2026-01-27 15:25:07'),
+(36, 'student', 1, 'login', 'Student login: STU001', '::1', NULL, '2026-01-27 15:28:02'),
+(37, 'student', 1, 'login', 'Student login: STU001', '::1', NULL, '2026-01-27 15:44:18'),
+(38, 'student', 1, 'login', 'Student login: STU001', '::1', NULL, '2026-01-27 15:47:14'),
+(39, 'student', 1, 'login', 'Student login: STU001', '::1', NULL, '2026-01-27 15:47:55'),
+(40, 'student', 1, 'login', 'Student login: STU001', '::1', NULL, '2026-01-27 15:51:25'),
+(41, 'teacher', 1, 'login', 'Teacher login: teacher@cec.edu', '::1', NULL, '2026-01-27 15:57:35'),
+(42, 'student', 1, 'login', 'Student login: STU001', '::1', NULL, '2026-01-27 16:21:50'),
+(43, 'student', 1, 'login', 'Student login: STU001', '::1', NULL, '2026-02-01 11:19:58'),
+(44, 'student', 1, 'login', 'Student login: STU001', '::1', NULL, '2026-02-01 11:21:01'),
+(45, 'student', 1, 'login', 'Student login: STU001', '::1', NULL, '2026-02-01 11:44:32'),
+(46, 'student', 1, 'login', 'Student login: STU001', '::1', NULL, '2026-02-01 11:57:32'),
+(47, 'student', 1, 'login', 'Student login: STU001', '::1', NULL, '2026-02-01 12:05:52'),
+(48, 'student', 1, 'login', 'Student login: STU001', '::1', NULL, '2026-02-01 12:06:55'),
+(49, 'student', 1, 'login', 'Student login: STU001', '::1', NULL, '2026-02-01 12:21:57');
 
 -- --------------------------------------------------------
 
@@ -520,7 +362,88 @@ INSERT INTO `violations` (`id`, `exam_session_id`, `student_name`, `exam_title`,
 (132, 4, 'Alice Johnson', 'Unknown Exam', 'FULLSCREEN_EXIT', 'Student exited fullscreen mode during exam', 'medium', '2026-01-26 00:11:34', NULL),
 (133, 9, 'Alice Johnson', 'Unknown Exam', 'TAB_SWITCH', 'Student switched tabs, minimized window, or switched applications', 'medium', '2026-01-26 00:22:58', NULL),
 (134, 9, 'Alice Johnson', 'Unknown Exam', 'TAB_SWITCH', 'Student switched tabs, minimized window, or switched applications', 'medium', '2026-01-26 00:23:11', NULL),
-(135, 9, 'Alice Johnson', 'Unknown Exam', 'TAB_SWITCH', 'Student switched tabs, minimized window, or switched applications', 'medium', '2026-01-26 00:25:32', NULL);
+(135, 9, 'Alice Johnson', 'Unknown Exam', 'TAB_SWITCH', 'Student switched tabs, minimized window, or switched applications', 'medium', '2026-01-26 00:25:32', NULL),
+(136, 10, 'Alice Johnson', 'Unknown Exam', 'COPY_ATTEMPT', 'Student attempted to copy content', 'medium', '2026-01-27 07:07:31', NULL),
+(137, 10, 'Alice Johnson', 'Unknown Exam', 'RIGHT_CLICK', 'Student attempted to right-click', 'medium', '2026-01-27 07:08:33', NULL),
+(138, 10, 'Alice Johnson', 'Unknown Exam', 'RIGHT_CLICK', 'Student attempted to right-click', 'medium', '2026-01-27 07:08:34', NULL),
+(139, 10, 'Alice Johnson', 'Unknown Exam', 'PASTE_ATTEMPT', 'Student attempted to paste content', 'medium', '2026-01-27 07:09:35', NULL),
+(140, 12, 'Alice Johnson', 'survey', 'FULLSCREEN_EXIT', 'Student exited fullscreen mode during exam', 'medium', '2026-01-27 07:28:30', NULL),
+(141, 12, 'Alice Johnson', 'survey', 'TAB_SWITCH', 'Student switched tabs, minimized window, or switched applications', 'medium', '2026-01-27 07:28:32', NULL),
+(142, 13, 'Alice Johnson', 'survey', 'FULLSCREEN_EXIT', 'Student exited fullscreen mode during exam', 'medium', '2026-01-27 07:31:04', NULL),
+(143, 14, 'Alice Johnson', 'Unknown Exam', 'RIGHT_CLICK', 'Student attempted to right-click', 'medium', '2026-01-27 07:31:51', NULL),
+(144, 14, 'Alice Johnson', 'Unknown Exam', 'RIGHT_CLICK', 'Student attempted to right-click', 'medium', '2026-01-27 07:31:51', NULL),
+(145, 14, 'Alice Johnson', 'survey', 'RIGHT_CLICK', 'Student attempted to right-click on exam content', 'medium', '2026-01-27 07:47:22', NULL),
+(146, 14, 'Alice Johnson', 'survey', 'RIGHT_CLICK', 'Student attempted to right-click', 'medium', '2026-01-27 07:47:22', NULL),
+(147, 14, 'Alice Johnson', 'survey', 'RIGHT_CLICK', 'Student attempted to right-click', 'medium', '2026-01-27 07:47:23', NULL),
+(148, 14, 'Alice Johnson', 'survey', 'RIGHT_CLICK', 'Student attempted to right-click on exam content', 'medium', '2026-01-27 07:47:23', NULL),
+(149, 14, 'Alice Johnson', 'survey', 'RIGHT_CLICK', 'Student attempted to right-click', 'medium', '2026-01-27 07:47:24', NULL),
+(150, 14, 'Alice Johnson', 'survey', 'RIGHT_CLICK', 'Student attempted to right-click on exam content', 'medium', '2026-01-27 07:47:24', NULL),
+(151, 14, 'Alice Johnson', 'survey', 'RIGHT_CLICK', 'Student attempted to right-click', 'medium', '2026-01-27 07:47:25', NULL),
+(152, 14, 'Alice Johnson', 'survey', 'RIGHT_CLICK', 'Student attempted to right-click on exam content', 'medium', '2026-01-27 07:47:25', NULL),
+(153, 14, 'Alice Johnson', 'survey', 'RIGHT_CLICK', 'Student attempted to right-click', 'medium', '2026-01-27 07:47:30', NULL),
+(154, 14, 'Alice Johnson', 'survey', 'RIGHT_CLICK', 'Student attempted to right-click', 'medium', '2026-01-27 07:47:31', NULL),
+(155, 14, 'Alice Johnson', 'survey', 'RIGHT_CLICK', 'Student attempted to right-click', 'medium', '2026-01-27 07:47:31', NULL),
+(156, 14, 'Alice Johnson', 'survey', 'RIGHT_CLICK', 'Student attempted to right-click', 'medium', '2026-01-27 07:47:32', NULL),
+(157, 14, 'Alice Johnson', 'survey', 'RIGHT_CLICK', 'Student attempted to right-click', 'medium', '2026-01-27 07:47:32', NULL),
+(158, 14, 'Alice Johnson', 'survey', 'RIGHT_CLICK', 'Student attempted to right-click', 'medium', '2026-01-27 07:47:32', NULL),
+(159, 14, 'Alice Johnson', 'survey', 'RIGHT_CLICK', 'Student attempted to right-click', 'medium', '2026-01-27 07:47:32', NULL),
+(160, 14, 'Alice Johnson', 'survey', 'RIGHT_CLICK', 'Student attempted to right-click', 'medium', '2026-01-27 07:47:32', NULL),
+(161, 14, 'Alice Johnson', 'survey', 'RIGHT_CLICK', 'Student attempted to right-click', 'medium', '2026-01-27 07:47:34', NULL),
+(162, 14, 'Alice Johnson', 'survey', 'RIGHT_CLICK', 'Student attempted to right-click on exam content', 'medium', '2026-01-27 07:47:34', NULL),
+(163, 14, 'Alice Johnson', 'survey', 'FULLSCREEN_EXIT', 'Student exited fullscreen mode during exam', 'medium', '2026-01-27 07:47:35', NULL),
+(164, 15, 'Alice Johnson', 'Unknown Exam', 'RIGHT_CLICK', 'Student attempted to right-click', 'medium', '2026-01-27 07:48:08', NULL),
+(165, 15, 'Alice Johnson', 'Unknown Exam', 'RIGHT_CLICK', 'Student attempted to right-click', 'medium', '2026-01-27 07:48:08', NULL),
+(166, 17, 'Alice Johnson', 'Unknown Exam', 'COPY_ATTEMPT', 'Student attempted to copy content', 'medium', '2026-01-27 08:22:09', NULL),
+(167, 17, 'Alice Johnson', 'Unknown Exam', 'PASTE_ATTEMPT', 'Student attempted to paste content', 'medium', '2026-01-27 08:22:19', NULL),
+(168, 17, 'Alice Johnson', 'Unknown Exam', 'PASTE_ATTEMPT', 'Student attempted to paste content', 'medium', '2026-01-27 08:22:21', NULL),
+(169, 18, 'Alice Johnson', 'Unknown Exam', 'COPY_ATTEMPT', 'Student attempted to copy content', 'medium', '2026-02-01 03:20:12', '{\"ip_address\":\"::1\",\"user_agent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36\",\"logged_at\":\"2026-02-01T11:20:12.871Z\"}'),
+(170, 19, 'Alice Johnson', 'Unknown Exam', 'COPY_ATTEMPT', 'Student attempted to copy content', 'medium', '2026-02-01 03:21:08', '{\"ip_address\":\"::1\",\"user_agent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36\",\"logged_at\":\"2026-02-01T11:21:08.436Z\"}'),
+(171, 19, 'Alice Johnson', 'Unknown Exam', 'RIGHT_CLICK', 'Student attempted to right-click', 'medium', '2026-02-01 03:21:26', '{\"ip_address\":\"::1\",\"user_agent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36\",\"logged_at\":\"2026-02-01T11:21:26.877Z\"}'),
+(172, 19, 'Alice Johnson', 'Unknown Exam', 'RIGHT_CLICK', 'Student attempted to right-click', 'medium', '2026-02-01 03:21:26', '{\"ip_address\":\"::1\",\"user_agent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36\",\"logged_at\":\"2026-02-01T11:21:26.970Z\"}'),
+(173, 19, 'Alice Johnson', 'Unknown Exam', 'RIGHT_CLICK', 'Student attempted to right-click', 'medium', '2026-02-01 03:21:26', '{\"ip_address\":\"::1\",\"user_agent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36\",\"logged_at\":\"2026-02-01T11:21:27.011Z\"}'),
+(174, 19, 'Alice Johnson', 'Unknown Exam', 'RIGHT_CLICK', 'Student attempted to right-click', 'medium', '2026-02-01 03:21:26', '{\"ip_address\":\"::1\",\"user_agent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36\",\"logged_at\":\"2026-02-01T11:21:27.047Z\"}'),
+(175, 20, 'Alice Johnson', 'Unknown Exam', 'WINDOW_SWITCH', 'Student switched to another application or window', 'medium', '2026-02-01 03:45:20', NULL),
+(176, 20, 'Alice Johnson', 'Unknown Exam', 'WINDOW_SWITCH', 'Student switched to another application or window', 'medium', '2026-02-01 03:45:33', NULL),
+(177, 20, 'Alice Johnson', 'Unknown Exam', 'WINDOW_SWITCH', 'Student switched to another application or window', 'medium', '2026-02-01 03:45:44', NULL),
+(178, 20, 'Alice Johnson', 'Unknown Exam', 'FULLSCREEN_EXIT', 'Student exited fullscreen mode during exam', 'medium', '2026-02-01 03:45:45', NULL),
+(179, 20, 'Alice Johnson', 'Unknown Exam', 'WINDOW_SWITCH', 'Student switched to another application or window', 'medium', '2026-02-01 03:49:19', NULL),
+(180, 20, 'Alice Johnson', 'Unknown Exam', 'WINDOW_SWITCH', 'Student switched to another application or window', 'medium', '2026-02-01 03:49:50', NULL),
+(181, 20, 'Alice Johnson', 'Unknown Exam', 'INACTIVITY', 'Student inactive for more than 5 minutes', 'medium', '2026-02-01 03:50:47', NULL),
+(182, 20, 'Alice Johnson', 'Unknown Exam', 'INACTIVITY', 'Student inactive for more than 5 minutes', 'medium', '2026-02-01 03:51:47', NULL),
+(183, 20, 'Alice Johnson', 'Unknown Exam', 'INACTIVITY', 'Student inactive for more than 5 minutes', 'medium', '2026-02-01 03:52:59', NULL),
+(184, 20, 'Alice Johnson', 'Unknown Exam', 'INACTIVITY', 'Student inactive for more than 5 minutes', 'medium', '2026-02-01 03:53:59', NULL),
+(185, 20, 'Alice Johnson', 'Unknown Exam', 'INACTIVITY', 'Student inactive for more than 5 minutes', 'medium', '2026-02-01 03:54:59', NULL),
+(186, 20, 'Alice Johnson', 'Unknown Exam', 'INACTIVITY', 'Student inactive for more than 5 minutes', 'medium', '2026-02-01 03:55:59', NULL),
+(187, 20, 'Alice Johnson', 'survey', 'WINDOW_SWITCH', 'Student switched to another application or window', 'medium', '2026-02-01 03:57:06', NULL),
+(188, 21, 'Alice Johnson', 'Unknown Exam', 'WINDOW_SWITCH', 'Student switched to another application or window', 'medium', '2026-02-01 03:57:45', NULL),
+(189, 21, 'Alice Johnson', 'Unknown Exam', 'WINDOW_SWITCH', 'Student switched to another application or window', 'medium', '2026-02-01 03:57:57', NULL),
+(190, 21, 'Alice Johnson', 'Unknown Exam', 'FULLSCREEN_EXIT', 'Student exited fullscreen mode during exam', 'medium', '2026-02-01 03:58:03', NULL),
+(191, 21, 'Alice Johnson', 'Unknown Exam', 'WINDOW_SWITCH', 'Student switched to another application or window', 'medium', '2026-02-01 03:58:25', NULL),
+(192, 21, 'Alice Johnson', 'Unknown Exam', 'WINDOW_SWITCH', 'Student switched to another application or window', 'medium', '2026-02-01 03:58:37', NULL),
+(193, 21, 'Alice Johnson', 'Unknown Exam', 'WINDOW_SWITCH', 'Student switched to another application or window', 'medium', '2026-02-01 03:58:49', NULL),
+(194, 21, 'Alice Johnson', 'Unknown Exam', 'WINDOW_SWITCH', 'Student switched to another application or window', 'medium', '2026-02-01 03:59:48', NULL),
+(195, 21, 'Alice Johnson', 'Unknown Exam', 'WINDOW_SWITCH', 'Student switched to another application or window', 'medium', '2026-02-01 04:00:29', NULL),
+(196, 21, 'Alice Johnson', 'Unknown Exam', 'WINDOW_SWITCH', 'Student switched to another application or window', 'medium', '2026-02-01 04:01:16', NULL),
+(197, 21, 'Alice Johnson', 'Unknown Exam', 'WINDOW_SWITCH', 'Student switched to another application or window', 'medium', '2026-02-01 04:01:29', NULL),
+(198, 21, 'Alice Johnson', 'Unknown Exam', 'WINDOW_SWITCH', 'Student switched to another application or window', 'medium', '2026-02-01 04:01:58', NULL),
+(199, 21, 'Alice Johnson', 'Unknown Exam', 'WINDOW_SWITCH', 'Student switched to another application or window', 'medium', '2026-02-01 04:02:12', NULL),
+(200, 21, 'Alice Johnson', 'Unknown Exam', 'WINDOW_SWITCH', 'Student switched to another application or window', 'medium', '2026-02-01 04:02:29', NULL),
+(201, 21, 'Alice Johnson', 'Unknown Exam', 'WINDOW_SWITCH', 'Student switched to another application or window', 'medium', '2026-02-01 04:02:43', NULL),
+(202, 22, 'Alice Johnson', 'Unknown Exam', 'WINDOW_SWITCH', 'Student switched to another application or window', 'medium', '2026-02-01 04:05:34', NULL),
+(203, 22, 'Alice Johnson', 'Unknown Exam', 'FULLSCREEN_EXIT', 'Student exited fullscreen mode during exam', 'medium', '2026-02-01 04:05:44', NULL),
+(204, 22, 'Alice Johnson', 'Unknown Exam', 'WINDOW_SWITCH', 'Student switched to another application or window', 'medium', '2026-02-01 04:05:46', NULL),
+(205, 23, 'Alice Johnson', 'Unknown Exam', 'WINDOW_SWITCH', 'Student switched to another application or window', 'medium', '2026-02-01 04:06:02', NULL),
+(206, 23, 'Alice Johnson', 'Unknown Exam', 'FULLSCREEN_EXIT', 'Student exited fullscreen mode during exam', 'medium', '2026-02-01 04:06:03', NULL),
+(207, 24, 'Alice Johnson', 'Unknown Exam', 'WINDOW_SWITCH', 'Student switched to another application or window', 'medium', '2026-02-01 04:07:06', NULL),
+(208, 24, 'Alice Johnson', 'Unknown Exam', 'FULLSCREEN_EXIT', 'Student exited fullscreen mode during exam', 'medium', '2026-02-01 04:07:11', NULL),
+(209, 24, 'Alice Johnson', 'Unknown Exam', 'WINDOW_SWITCH', 'Student switched to another application or window', 'medium', '2026-02-01 04:11:06', NULL),
+(210, 24, 'Alice Johnson', 'Unknown Exam', 'WINDOW_SWITCH', 'Student switched to another application or window', 'medium', '2026-02-01 04:11:18', NULL),
+(211, 25, 'Alice Johnson', 'Unknown Exam', 'WINDOW_SWITCH', 'Student switched to another application or window', 'medium', '2026-02-01 04:11:27', NULL),
+(212, 25, 'Alice Johnson', 'Unknown Exam', 'WINDOW_SWITCH', 'Student switched to another application or window', 'medium', '2026-02-01 04:11:45', NULL),
+(213, 25, 'Alice Johnson', 'Unknown Exam', 'COPY_ATTEMPT', 'Student attempted to copy content', 'medium', '2026-02-01 04:11:58', NULL),
+(214, 26, 'Alice Johnson', 'Unknown Exam', 'WINDOW_SWITCH', 'Student switched to another application or window', 'medium', '2026-02-01 04:22:15', NULL),
+(215, 26, 'Alice Johnson', 'Unknown Exam', 'FULLSCREEN_EXIT', 'Student exited fullscreen mode during exam', 'medium', '2026-02-01 04:22:25', NULL),
+(216, 26, 'Alice Johnson', 'Unknown Exam', 'WINDOW_SWITCH', 'Student switched to another application or window', 'medium', '2026-02-01 04:22:26', NULL);
 
 --
 -- Indexes for dumped tables
@@ -532,13 +455,6 @@ INSERT INTO `violations` (`id`, `exam_session_id`, `student_name`, `exam_title`,
 ALTER TABLE `administrators`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `email` (`email`);
-
---
--- Indexes for table `categories`
---
-ALTER TABLE `categories`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `name` (`name`);
 
 --
 -- Indexes for table `exams`
@@ -559,35 +475,6 @@ ALTER TABLE `exam_sessions`
   ADD KEY `idx_exam_sessions_exam_id` (`exam_id`);
 
 --
--- Indexes for table `inventory`
---
-ALTER TABLE `inventory`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `menu_item_id` (`menu_item_id`);
-
---
--- Indexes for table `menu_items`
---
-ALTER TABLE `menu_items`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `category_id` (`category_id`);
-
---
--- Indexes for table `orders`
---
-ALTER TABLE `orders`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `user_id` (`user_id`);
-
---
--- Indexes for table `order_items`
---
-ALTER TABLE `order_items`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `order_id` (`order_id`),
-  ADD KEY `menu_item_id` (`menu_item_id`);
-
---
 -- Indexes for table `proctoring_settings`
 --
 ALTER TABLE `proctoring_settings`
@@ -601,7 +488,8 @@ ALTER TABLE `students`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `student_id` (`student_id`),
   ADD UNIQUE KEY `email` (`email`),
-  ADD KEY `idx_students_student_id` (`student_id`);
+  ADD KEY `idx_students_student_id` (`student_id`),
+  ADD KEY `idx_students_teacher_id` (`teacher_id`);
 
 --
 -- Indexes for table `system_logs`
@@ -644,12 +532,6 @@ ALTER TABLE `administrators`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT for table `categories`
---
-ALTER TABLE `categories`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
-
---
 -- AUTO_INCREMENT for table `exams`
 --
 ALTER TABLE `exams`
@@ -659,31 +541,7 @@ ALTER TABLE `exams`
 -- AUTO_INCREMENT for table `exam_sessions`
 --
 ALTER TABLE `exam_sessions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
-
---
--- AUTO_INCREMENT for table `inventory`
---
-ALTER TABLE `inventory`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
-
---
--- AUTO_INCREMENT for table `menu_items`
---
-ALTER TABLE `menu_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
-
---
--- AUTO_INCREMENT for table `orders`
---
-ALTER TABLE `orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
-
---
--- AUTO_INCREMENT for table `order_items`
---
-ALTER TABLE `order_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `proctoring_settings`
@@ -701,7 +559,7 @@ ALTER TABLE `students`
 -- AUTO_INCREMENT for table `system_logs`
 --
 ALTER TABLE `system_logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
 
 --
 -- AUTO_INCREMENT for table `teachers`
@@ -719,7 +577,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `violations`
 --
 ALTER TABLE `violations`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=136;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=217;
 
 --
 -- Constraints for dumped tables
@@ -732,36 +590,17 @@ ALTER TABLE `exams`
   ADD CONSTRAINT `exams_ibfk_1` FOREIGN KEY (`teacher_id`) REFERENCES `teachers` (`id`) ON DELETE CASCADE;
 
 --
+-- Constraints for table `students`
+--
+ALTER TABLE `students`
+  ADD CONSTRAINT `students_ibfk_1` FOREIGN KEY (`teacher_id`) REFERENCES `teachers` (`id`) ON DELETE CASCADE;
+
+--
 -- Constraints for table `exam_sessions`
 --
 ALTER TABLE `exam_sessions`
   ADD CONSTRAINT `exam_sessions_ibfk_1` FOREIGN KEY (`exam_id`) REFERENCES `exams` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `exam_sessions_ibfk_2` FOREIGN KEY (`student_id`) REFERENCES `students` (`id`) ON DELETE CASCADE;
-
---
--- Constraints for table `inventory`
---
-ALTER TABLE `inventory`
-  ADD CONSTRAINT `inventory_ibfk_1` FOREIGN KEY (`menu_item_id`) REFERENCES `menu_items` (`id`);
-
---
--- Constraints for table `menu_items`
---
-ALTER TABLE `menu_items`
-  ADD CONSTRAINT `menu_items_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`);
-
---
--- Constraints for table `orders`
---
-ALTER TABLE `orders`
-  ADD CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
-
---
--- Constraints for table `order_items`
---
-ALTER TABLE `order_items`
-  ADD CONSTRAINT `order_items_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`),
-  ADD CONSTRAINT `order_items_ibfk_2` FOREIGN KEY (`menu_item_id`) REFERENCES `menu_items` (`id`);
 
 --
 -- Constraints for table `violations`

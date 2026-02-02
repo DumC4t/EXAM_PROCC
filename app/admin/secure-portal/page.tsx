@@ -89,6 +89,7 @@ export default function AdminPortal() {
     email: "",
     studentId: "",
     status: "active" as "active" | "suspended",
+    teacherId: "",
   })
   const [newTeacher, setNewTeacher] = useState({
     name: "",
@@ -223,6 +224,15 @@ export default function AdminPortal() {
       return
     }
 
+    if (!newStudent.teacherId) {
+      toast({
+        title: "Error",
+        description: "Please select a teacher to assign to this student",
+        variant: "destructive",
+      })
+      return
+    }
+
     try {
       const response = await fetch("/api/admin/students", {
         method: "POST",
@@ -234,6 +244,7 @@ export default function AdminPortal() {
           email: newStudent.email,
           studentId: newStudent.studentId,
           status: newStudent.status,
+          teacherId: parseInt(newStudent.teacherId),
         }),
       })
 
@@ -249,7 +260,7 @@ export default function AdminPortal() {
         await loadAdminData()
 
         setShowAddStudent(false)
-        setNewStudent({ name: "", email: "", studentId: "", status: "active" })
+        setNewStudent({ name: "", email: "", studentId: "", status: "active", teacherId: "" })
       } else {
         toast({
           title: "Error",
@@ -713,6 +724,26 @@ export default function AdminPortal() {
                             <SelectContent>
                               <SelectItem value="active">Active</SelectItem>
                               <SelectItem value="suspended">Suspended</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div>
+                          <Label htmlFor="studentTeacher">Assign Teacher *</Label>
+                          <Select
+                            value={newStudent.teacherId}
+                            onValueChange={(value) =>
+                              setNewStudent({ ...newStudent, teacherId: value })
+                            }
+                          >
+                            <SelectTrigger id="studentTeacher">
+                              <SelectValue placeholder="Select a teacher" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {teachers.map((teacher) => (
+                                <SelectItem key={teacher.id} value={teacher.id.toString()}>
+                                  {teacher.name} ({teacher.department})
+                                </SelectItem>
+                              ))}
                             </SelectContent>
                           </Select>
                         </div>
