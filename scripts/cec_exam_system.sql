@@ -167,6 +167,7 @@ CREATE TABLE `students` (
   `email` varchar(255) DEFAULT NULL,
   `department` varchar(255) DEFAULT NULL,
   `year_level` int(11) DEFAULT NULL,
+  `teacher_id` int(11) NOT NULL,
   `status` enum('active','inactive','graduated') DEFAULT 'active',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
@@ -176,17 +177,17 @@ CREATE TABLE `students` (
 -- Dumping data for table `students`
 --
 
-INSERT INTO `students` (`id`, `name`, `student_id`, `email`, `department`, `year_level`, `status`, `created_at`, `updated_at`) VALUES
-(1, 'Alice Johnson', 'STU001', 'alice.johnson@student.cec.edu', 'Computer Science', 3, 'active', '2025-09-25 03:28:10', '2025-09-25 03:28:10'),
-(2, 'Bob Wilson', 'STU002', 'bob.wilson@student.cec.edu', 'Information Technology', 2, 'active', '2025-09-25 03:28:10', '2025-09-25 03:28:10'),
-(3, 'Carol Davis', 'STU003', 'carol.davis@student.cec.edu', 'Computer Science', 4, 'active', '2025-09-25 03:28:10', '2025-09-25 03:28:10'),
-(4, 'David Brown', 'STU004', 'david.brown@student.cec.edu', 'Information Technology', 1, 'active', '2025-09-25 03:28:10', '2025-09-25 03:28:10'),
-(5, 'Eva Martinez', 'STU005', 'eva.martinez@student.cec.edu', 'Computer Science', 3, 'active', '2025-09-25 03:28:10', '2025-09-25 03:28:10'),
-(6, 'Frank Taylor', 'STU006', 'frank.taylor@student.cec.edu', 'Computer Engineering', 2, 'active', '2025-09-25 03:28:10', '2025-09-25 03:28:10'),
-(7, 'Grace Lee', 'STU007', 'grace.lee@student.cec.edu', 'Software Engineering', 4, 'active', '2025-09-25 03:28:10', '2025-09-25 03:28:10'),
-(8, 'Henry Chen', 'STU008', 'henry.chen@student.cec.edu', 'Information Technology', 3, 'active', '2025-09-25 03:28:10', '2025-09-25 03:28:10'),
-(9, 'Ivy Rodriguez', 'STU009', 'ivy.rodriguez@student.cec.edu', 'Computer Science', 1, 'active', '2025-09-25 03:28:10', '2025-09-25 03:28:10'),
-(10, 'Jack Thompson', 'STU010', 'jack.thompson@student.cec.edu', 'Computer Engineering', 2, 'active', '2025-09-25 03:28:10', '2025-09-25 03:28:10');
+INSERT INTO `students` (`id`, `name`, `student_id`, `email`, `department`, `year_level`, `teacher_id`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'Alice Johnson', 'STU001', 'alice.johnson@student.cec.edu', 'Computer Science', 3, 1, 'active', '2025-09-25 03:28:10', '2025-09-25 03:28:10'),
+(2, 'Bob Wilson', 'STU002', 'bob.wilson@student.cec.edu', 'Information Technology', 2, 2, 'active', '2025-09-25 03:28:10', '2025-09-25 03:28:10'),
+(3, 'Carol Davis', 'STU003', 'carol.davis@student.cec.edu', 'Computer Science', 4, 1, 'active', '2025-09-25 03:28:10', '2025-09-25 03:28:10'),
+(4, 'David Brown', 'STU004', 'david.brown@student.cec.edu', 'Information Technology', 1, 3, 'active', '2025-09-25 03:28:10', '2025-09-25 03:28:10'),
+(5, 'Eva Martinez', 'STU005', 'eva.martinez@student.cec.edu', 'Computer Science', 3, 1, 'active', '2025-09-25 03:28:10', '2025-09-25 03:28:10'),
+(6, 'Frank Taylor', 'STU006', 'frank.taylor@student.cec.edu', 'Computer Engineering', 2, 2, 'active', '2025-09-25 03:28:10', '2025-09-25 03:28:10'),
+(7, 'Grace Lee', 'STU007', 'grace.lee@student.cec.edu', 'Software Engineering', 4, 3, 'active', '2025-09-25 03:28:10', '2025-09-25 03:28:10'),
+(8, 'Henry Chen', 'STU008', 'henry.chen@student.cec.edu', 'Information Technology', 3, 1, 'active', '2025-09-25 03:28:10', '2025-09-25 03:28:10'),
+(9, 'Ivy Rodriguez', 'STU009', 'ivy.rodriguez@student.cec.edu', 'Computer Science', 1, 2, 'active', '2025-09-25 03:28:10', '2025-09-25 03:28:10'),
+(10, 'Jack Thompson', 'STU010', 'jack.thompson@student.cec.edu', 'Computer Engineering', 2, 3, 'active', '2025-09-25 03:28:10', '2025-09-25 03:28:10');
 
 -- --------------------------------------------------------
 
@@ -487,7 +488,8 @@ ALTER TABLE `students`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `student_id` (`student_id`),
   ADD UNIQUE KEY `email` (`email`),
-  ADD KEY `idx_students_student_id` (`student_id`);
+  ADD KEY `idx_students_student_id` (`student_id`),
+  ADD KEY `idx_students_teacher_id` (`teacher_id`);
 
 --
 -- Indexes for table `system_logs`
@@ -586,6 +588,12 @@ ALTER TABLE `violations`
 --
 ALTER TABLE `exams`
   ADD CONSTRAINT `exams_ibfk_1` FOREIGN KEY (`teacher_id`) REFERENCES `teachers` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `students`
+--
+ALTER TABLE `students`
+  ADD CONSTRAINT `students_ibfk_1` FOREIGN KEY (`teacher_id`) REFERENCES `teachers` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `exam_sessions`

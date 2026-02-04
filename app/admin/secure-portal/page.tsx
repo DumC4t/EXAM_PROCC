@@ -38,6 +38,8 @@ interface Student {
   email: string
   student_id: string
   status: "active" | "suspended"
+  teacher_id?: string
+  teacher_name?: string
   created_at: string
 }
 

@@ -147,6 +147,10 @@ export default function ExamPage({ params }: { params: { examId: string } }) {
 
       if (!isCurrentlyFullscreen && examStarted) {
         logViolation("FULLSCREEN_EXIT", "Student exited fullscreen mode during exam")
+        // Force fullscreen re-entry after a short delay
+        setTimeout(() => {
+          enterFullscreen()
+        }, 500)
       }
     }
 
@@ -353,6 +357,21 @@ export default function ExamPage({ params }: { params: { examId: string } }) {
     }
   }, [examStarted, logViolation, updateActivity, handleWindowBlur])
 
+  // Continuous fullscreen enforcement
+  useEffect(() => {
+    if (!examStarted) return
+
+    const enforceFullscreen = setInterval(() => {
+      const isCurrentlyFullscreen = !!document.fullscreenElement
+      if (!isCurrentlyFullscreen) {
+        console.log("[v0] Fullscreen lost, forcing re-entry...")
+        enterFullscreen()
+      }
+    }, 1000) // Check every second
+
+    return () => clearInterval(enforceFullscreen)
+  }, [examStarted, enterFullscreen])
+
   // Inactivity monitoring
   useEffect(() => {
     if (!examStarted) return
@@ -536,32 +555,26 @@ export default function ExamPage({ params }: { params: { examId: string } }) {
         }
       `}</style>
 
-      {/* Proctoring Header */}
-      <div className="bg-red-600 text-white px-4 py-2 flex items-center justify-between">
+      {/* Proctoring Header - Minimal */}
+      <div className="fixed top-0 left-0 right-0 bg-red-600 text-white px-4 py-2 flex items-center justify-between z-40 h-14">
         <div className="flex items-center gap-2">
           <Eye className="h-4 w-4" />
           <span className="text-sm font-medium">EXAM IN PROGRESS - MONITORED</span>
         </div>
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2">
-            <Clock className="h-4 w-4" />
-            <span className="font-mono">{formatTime(timeRemaining)}</span>
-          </div>
-          <Button
-            onClick={handleEndExam}
-            variant="outline"
-            size="sm"
-            className="bg-white text-red-600 hover:bg-gray-100"
-          >
-            End Exam
-          </Button>
-        </div>
+        <Button
+          onClick={handleEndExam}
+          variant="outline"
+          size="sm"
+          className="bg-white text-red-600 hover:bg-gray-100"
+        >
+          End Exam
+        </Button>
       </div>
 
-      {/* Exam Content */}
-      <div className="p-4">
+      {/* Exam Content - Full Screen */}
+      <div className="fixed inset-0 top-14 bg-white overflow-hidden">
         {isBlocked ? (
-          <div className="flex items-center justify-center h-96">
+          <div className="flex items-center justify-center h-full">
             <div className="text-center">
               <AlertTriangle className="h-16 w-16 text-red-500 mx-auto mb-4" />
               <h2 className="text-xl font-bold text-red-600 mb-2">Exam Temporarily Blocked</h2>
@@ -569,18 +582,13 @@ export default function ExamPage({ params }: { params: { examId: string } }) {
             </div>
           </div>
         ) : (
-          <div className="max-w-4xl mx-auto">
-            <div className="w-full h-screen bg-yellow-100 p-4 rounded border-2 border-yellow-500">
-              <p className="text-lg font-bold mb-4">Testing iframe - if you see this in yellow, the issue is with iframe rendering</p>
-              <iframe
-                ref={iframeRef}
-                src={examData.formUrl}
-                className="w-full h-full border-2 border-red-500"
-                title="Exam Form"
-                sandbox="allow-forms allow-scripts allow-same-origin"
-              />
-            </div>
-          </div>
+          <iframe
+            ref={iframeRef}
+            src={examData.formUrl}
+            className="w-full h-full border-none"
+            title="Exam Form"
+            sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
+          />
         )}
       </div>
     </div>
