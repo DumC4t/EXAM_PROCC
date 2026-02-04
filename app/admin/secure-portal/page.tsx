@@ -91,7 +91,6 @@ export default function AdminPortal() {
     email: "",
     studentId: "",
     status: "active" as "active" | "suspended",
-    teacherId: "",
   })
   const [newTeacher, setNewTeacher] = useState({
     name: "",
@@ -226,15 +225,6 @@ export default function AdminPortal() {
       return
     }
 
-    if (!newStudent.teacherId) {
-      toast({
-        title: "Error",
-        description: "Please select a teacher to assign to this student",
-        variant: "destructive",
-      })
-      return
-    }
-
     try {
       const response = await fetch("/api/admin/students", {
         method: "POST",
@@ -246,7 +236,6 @@ export default function AdminPortal() {
           email: newStudent.email,
           studentId: newStudent.studentId,
           status: newStudent.status,
-          teacherId: parseInt(newStudent.teacherId),
         }),
       })
 
@@ -262,7 +251,7 @@ export default function AdminPortal() {
         await loadAdminData()
 
         setShowAddStudent(false)
-        setNewStudent({ name: "", email: "", studentId: "", status: "active", teacherId: "" })
+        setNewStudent({ name: "", email: "", studentId: "", status: "active" })
       } else {
         toast({
           title: "Error",
@@ -281,15 +270,6 @@ export default function AdminPortal() {
 
   const handleEditStudent = async (student: Student) => {
     try {
-      if (!student.teacher_id) {
-        toast({
-          title: "Error",
-          description: "Teacher assignment is required",
-          variant: "destructive",
-        })
-        return
-      }
-
       const response = await fetch(`/api/admin/students/${student.id}`, {
         method: "PUT",
         headers: {
@@ -300,7 +280,6 @@ export default function AdminPortal() {
           email: student.email,
           student_id: student.student_id,
           status: student.status,
-          teacherId: parseInt(student.teacher_id),
         }),
       })
 
@@ -739,26 +718,6 @@ export default function AdminPortal() {
                             </SelectContent>
                           </Select>
                         </div>
-                        <div>
-                          <Label htmlFor="studentTeacher">Assign Teacher *</Label>
-                          <Select
-                            value={newStudent.teacherId}
-                            onValueChange={(value) =>
-                              setNewStudent({ ...newStudent, teacherId: value })
-                            }
-                          >
-                            <SelectTrigger id="studentTeacher">
-                              <SelectValue placeholder="Select a teacher" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {teachers.map((teacher) => (
-                                <SelectItem key={teacher.id} value={teacher.id.toString()}>
-                                  {teacher.name} ({teacher.department})
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </div>
                         <Button onClick={handleAddStudent} className="w-full">
                           Add Student
                         </Button>
@@ -847,26 +806,6 @@ export default function AdminPortal() {
                                         <SelectContent>
                                           <SelectItem value="active">Active</SelectItem>
                                           <SelectItem value="suspended">Suspended</SelectItem>
-                                        </SelectContent>
-                                      </Select>
-                                    </div>
-                                    <div>
-                                      <Label htmlFor="editStudentTeacher">Assigned Teacher *</Label>
-                                      <Select
-                                        value={editingStudent.teacher_id || ""}
-                                        onValueChange={(value) =>
-                                          setEditingStudent({ ...editingStudent, teacher_id: value })
-                                        }
-                                      >
-                                        <SelectTrigger id="editStudentTeacher">
-                                          <SelectValue placeholder="Select a teacher" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                          {teachers.map((teacher) => (
-                                            <SelectItem key={teacher.id} value={teacher.id.toString()}>
-                                              {teacher.name} ({teacher.department})
-                                            </SelectItem>
-                                          ))}
                                         </SelectContent>
                                       </Select>
                                     </div>
