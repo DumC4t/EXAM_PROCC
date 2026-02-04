@@ -782,6 +782,17 @@ export default function TeacherDashboard() {
                         onChange={(e) => setViolationSearch(e.target.value)}
                         className="flex-1"
                       />
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          setViolationSearch("")
+                          setSelectedSeverity("all")
+                          setSelectedViolationType("all")
+                        }}
+                      >
+                        Clear
+                      </Button>
                     </div>
                     
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -890,6 +901,13 @@ export default function TeacherDashboard() {
                       onChange={(e) => setMonitoringSearch(e.target.value)}
                       className="flex-1"
                     />
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setMonitoringSearch("")}
+                    >
+                      Clear
+                    </Button>
                   </div>
 
                   {/* Sessions List */}
