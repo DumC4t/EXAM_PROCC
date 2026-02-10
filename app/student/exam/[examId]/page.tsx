@@ -1,8 +1,6 @@
 "use client"
 
-import { useRef } from "react"
-
-import { useState, useEffect, useCallback } from "react"
+import { useRef, useState, useEffect, useCallback } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { AlertTriangle, Shield, Clock, Eye } from "lucide-react"
@@ -20,19 +18,17 @@ export default function ExamPage({ params }: { params: { examId: string } }) {
   const [examStarted, setExamStarted] = useState(false)
   const [violations, setViolations] = useState<Violation[]>([])
   const [isBlocked, setIsBlocked] = useState(false)
-  const [timeRemaining, setTimeRemaining] = useState(0) // Initialize with 0
   const [lastActivity, setLastActivity] = useState(Date.now())
   const [showWarning, setShowWarning] = useState(false)
   const [warningMessage, setWarningMessage] = useState("")
 
   const router = useRouter()
   const { toast } = useToast()
+  const iframeRef = useRef<HTMLIFrameElement>(null)
 
-  // Get exam data from localStorage
   const [examData, setExamData] = useState<any>(null)
 
   useEffect(() => {
-    // Load exam data from localStorage
     const currentExam = localStorage.getItem("currentExam")
     if (currentExam) {
       const exam = JSON.parse(currentExam)
@@ -42,16 +38,13 @@ export default function ExamPage({ params }: { params: { examId: string } }) {
         duration: exam.duration,
         uniqueId: exam.uniqueId,
       })
-      setTimeRemaining(exam.duration * 60) // Convert minutes to seconds
     } else {
-      // Fallback to mock data if no current exam
       setExamData({
         title: "Mathematics Final Exam",
         formUrl: "https://docs.google.com/forms/d/e/1FAIpQLSf_example/viewform",
         duration: 120,
         uniqueId: "MATH2024001",
       })
-      setTimeRemaining(120 * 60) // Convert minutes to seconds
     }
   }, [])
 
@@ -65,12 +58,10 @@ export default function ExamPage({ params }: { params: { examId: string } }) {
 
       setViolations((prev) => [...prev, violation])
 
-      // Get student data from localStorage
       const studentData = localStorage.getItem("studentData")
       const student = studentData ? JSON.parse(studentData) : null
       const sessionId = localStorage.getItem("examSessionId")
 
-      // Send to server
       fetch("/api/violations", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -87,12 +78,10 @@ export default function ExamPage({ params }: { params: { examId: string } }) {
 
       console.log("[v0] Violation logged:", violation)
 
-      // Show warning
       setWarningMessage(description)
       setShowWarning(true)
       setIsBlocked(true)
 
-      // Auto-unblock after 10 seconds
       setTimeout(() => {
         setShowWarning(false)
         setIsBlocked(false)
@@ -104,40 +93,31 @@ export default function ExamPage({ params }: { params: { examId: string } }) {
         variant: "destructive",
       })
     },
-    [toast, params.examId],
+    [toast, params.examId, examData],
   )
 
-  // Fullscreen management
   const enterFullscreen = useCallback(() => {
     const elem = document.documentElement
     if (elem.requestFullscreen) {
-      elem.requestFullscreen()
+      elem.requestFullscreen().catch((err) => {
+        console.error("Fullscreen request failed:", err)
+        // If fullscreen fails, log but don't block the exam
+      })
     }
   }, [])
 
   const exitFullscreen = useCallback(() => {
-    if (document.exitFullscreen) {
-      document.exitFullscreen()
+    if (document.fullscreenElement && document.exitFullscreen) {
+      document.exitFullscreen().catch((err) => {
+        console.error("Exit fullscreen failed:", err)
+      })
     }
   }, [])
 
-  // Activity monitoring
   const updateActivity = useCallback(() => {
     setLastActivity(Date.now())
   }, [])
 
-  // Handle window blur detection (Alt+Tab, App switching)
-  // This detects when the browser window loses focus completely
-  const handleWindowBlur = useCallback(() => {
-    if (examStarted && !isBlocked) {
-      logViolation("WINDOW_SWITCH", "Student switched to another application or window")
-    }
-  }, [examStarted, isBlocked, logViolation])
-
-  // Track if focus was lost to detect real tab switches vs iframe interactions
-  let hadFocusLoss = false
-
-  // Event listeners
   useEffect(() => {
     if (!examStarted) return
 
@@ -147,45 +127,23 @@ export default function ExamPage({ params }: { params: { examId: string } }) {
 
       if (!isCurrentlyFullscreen && examStarted) {
         logViolation("FULLSCREEN_EXIT", "Student exited fullscreen mode during exam")
+<<<<<<< Updated upstream
         // Force fullscreen re-entry after a short delay
         setTimeout(() => {
           enterFullscreen()
         }, 500)
+=======
+        // Immediately try to re-enter fullscreen
+        enterFullscreen()
+>>>>>>> Stashed changes
       }
     }
 
     const handleVisibilityChange = () => {
-      // Only log if the actual document is hidden AND window had focus loss
-      // This prevents iframe clicks from triggering false positives
-      if (document.hidden && examStarted && !isBlocked && hadFocusLoss) {
-        logViolation("TAB_SWITCH", "Student switched tabs or minimized window")
-        hadFocusLoss = false
-      }
-    }
-
-    const handleFocus = () => {
-      hadFocusLoss = false
-    }
-
-    const handleBlurEvent = () => {
-      hadFocusLoss = true
-    }
-
-    // Listen for violation messages from iframe
-    // Only violations trigger logViolation() - normal iframe activity is ignored
-    const handleIframeMessage = (event: MessageEvent) => {
-      // Only accept messages from the same origin for security
-      if (event.origin !== window.location.origin) return
-
-      // Only process actual violation events, ignore activity heartbeats
-      if (event.data.type === "VIOLATION") {
-        console.log("[v0] Iframe violation detected:", event.data.violationType, event.data.description)
-        logViolation(event.data.violationType, event.data.description)
-      } else if (event.data.type === "IFRAME_ACTIVITY") {
-        // Activity heartbeats are logged for debugging but don't trigger violations
-        console.log("[v0] Iframe activity heartbeat received")
-      } else {
-        console.log("[v0] Unknown message type:", event.data.type)
+      // document.hidden is ONLY true when actually switching tabs or minimizing
+      // It stays false when clicking iframes
+      if (document.hidden && examStarted && !isBlocked) {
+        logViolation("TAB_SWITCH", "Student switched tabs, minimized window, or switched applications")
       }
     }
 
@@ -193,56 +151,48 @@ export default function ExamPage({ params }: { params: { examId: string } }) {
       updateActivity()
 
       if (examStarted) {
-        // Block Alt+Tab
         if (e.altKey && e.key === "Tab") {
           e.preventDefault()
           logViolation("ALT_TAB", "Student attempted to use Alt+Tab to switch applications")
           return false
         }
 
-        // Block Ctrl+Alt+Tab
         if (e.ctrlKey && e.altKey && e.key === "Tab") {
           e.preventDefault()
           logViolation("ALT_TAB", "Student attempted to use Alt+Tab to switch applications")
           return false
         }
 
-        // Block new tab/window/close tab shortcuts
         if (e.ctrlKey && (e.key === "t" || e.key === "n" || e.key === "w")) {
           e.preventDefault()
           logViolation("KEYBOARD_SHORTCUT", `Student attempted to use Ctrl+${e.key.toUpperCase()}`)
           return false
         }
 
-        // Block paste (Ctrl+V and Cmd+V for Mac)
         if ((e.ctrlKey || e.metaKey) && e.key === "v") {
           e.preventDefault()
           logViolation("PASTE_ATTEMPT", "Student attempted to paste content")
           return false
         }
 
-        // Block copy (Ctrl+C and Cmd+C for Mac)
         if ((e.ctrlKey || e.metaKey) && e.key === "c") {
           e.preventDefault()
           logViolation("COPY_ATTEMPT", "Student attempted to copy content")
           return false
         }
 
-        // Block cut (Ctrl+X and Cmd+X for Mac)
         if ((e.ctrlKey || e.metaKey) && e.key === "x") {
           e.preventDefault()
           logViolation("CUT_ATTEMPT", "Student attempted to cut content")
           return false
         }
 
-        // Block select all (Ctrl+A and Cmd+A for Mac)
         if ((e.ctrlKey || e.metaKey) && e.key === "a") {
           e.preventDefault()
           logViolation("SELECT_ALL", "Student attempted to select all content")
           return false
         }
 
-        // Block developer tools
         if (e.key === "F12" || (e.ctrlKey && e.shiftKey && e.key === "I") || (e.ctrlKey && e.shiftKey && e.key === "K")) {
           e.preventDefault()
           logViolation("DEV_TOOLS", "Student attempted to open developer tools")
@@ -255,7 +205,14 @@ export default function ExamPage({ params }: { params: { examId: string } }) {
       updateActivity()
     }
 
-    // Prevent right-click context menu
+    const handleClick = () => {
+      updateActivity()
+    }
+
+    const handleScroll = () => {
+      updateActivity()
+    }
+
     const handleContextMenu = (e: MouseEvent) => {
       if (examStarted) {
         e.preventDefault()
@@ -266,10 +223,8 @@ export default function ExamPage({ params }: { params: { examId: string } }) {
       }
     }
 
-    // Also handle mousedown for right-click
     const handleMouseDown = (e: MouseEvent) => {
       if (examStarted && e.button === 2) {
-        // button 2 is right-click
         e.preventDefault()
         e.stopPropagation()
         logViolation("RIGHT_CLICK", "Student attempted to right-click")
@@ -315,11 +270,12 @@ export default function ExamPage({ params }: { params: { examId: string } }) {
       }
     }
 
-    // Add all event listeners
     document.addEventListener("fullscreenchange", handleFullscreenChange)
     document.addEventListener("visibilitychange", handleVisibilityChange)
     document.addEventListener("keydown", handleKeyDown, true)
     document.addEventListener("mousemove", handleMouseMove)
+    document.addEventListener("click", handleClick)
+    document.addEventListener("scroll", handleScroll, true)
     document.addEventListener("mousedown", handleMouseDown, true)
     document.addEventListener("contextmenu", handleContextMenu, true)
     document.addEventListener("selectstart", handleSelectStart)
@@ -327,21 +283,15 @@ export default function ExamPage({ params }: { params: { examId: string } }) {
     document.addEventListener("paste", handlePaste, true)
     document.addEventListener("copy", handleCopy, true)
     document.addEventListener("cut", handleCut, true)
-    
-    // Window focus/blur for detecting real tab switches vs iframe interactions
-    window.addEventListener("blur", handleBlurEvent)
-    window.addEventListener("focus", handleFocus)
-    window.addEventListener("blur", handleWindowBlur)
     window.addEventListener("contextmenu", handleContextMenu, true)
-    
-    // Listen for messages from iframe (for violations detected inside iframe)
-    window.addEventListener("message", handleIframeMessage)
 
     return () => {
       document.removeEventListener("fullscreenchange", handleFullscreenChange)
       document.removeEventListener("visibilitychange", handleVisibilityChange)
       document.removeEventListener("keydown", handleKeyDown, true)
       document.removeEventListener("mousemove", handleMouseMove)
+      document.removeEventListener("click", handleClick)
+      document.removeEventListener("scroll", handleScroll, true)
       document.removeEventListener("mousedown", handleMouseDown, true)
       document.removeEventListener("contextmenu", handleContextMenu, true)
       document.removeEventListener("selectstart", handleSelectStart)
@@ -349,20 +299,21 @@ export default function ExamPage({ params }: { params: { examId: string } }) {
       document.removeEventListener("paste", handlePaste, true)
       document.removeEventListener("copy", handleCopy, true)
       document.removeEventListener("cut", handleCut, true)
-      window.removeEventListener("blur", handleBlurEvent)
-      window.removeEventListener("focus", handleFocus)
-      window.removeEventListener("blur", handleWindowBlur)
       window.removeEventListener("contextmenu", handleContextMenu, true)
-      window.removeEventListener("message", handleIframeMessage)
     }
-  }, [examStarted, logViolation, updateActivity, handleWindowBlur])
+  }, [examStarted, logViolation, updateActivity, isBlocked, enterFullscreen])
 
+<<<<<<< Updated upstream
   // Continuous fullscreen enforcement
+=======
+  // Continuous fullscreen enforcement - check every 500ms for faster response
+>>>>>>> Stashed changes
   useEffect(() => {
     if (!examStarted) return
 
     const enforceFullscreen = setInterval(() => {
       const isCurrentlyFullscreen = !!document.fullscreenElement
+<<<<<<< Updated upstream
       if (!isCurrentlyFullscreen) {
         console.log("[v0] Fullscreen lost, forcing re-entry...")
         enterFullscreen()
@@ -373,46 +324,54 @@ export default function ExamPage({ params }: { params: { examId: string } }) {
   }, [examStarted, enterFullscreen])
 
   // Inactivity monitoring
+=======
+      if (!isCurrentlyFullscreen && !isBlocked) {
+        // Only try to re-enter if not currently showing a violation warning
+        console.log("[v0] Fullscreen lost, attempting re-entry...")
+        enterFullscreen()
+      }
+    }, 500) // Check twice per second for faster re-entry
+
+    return () => clearInterval(enforceFullscreen)
+  }, [examStarted, enterFullscreen, isBlocked])
+
+  // Prevent page refresh/close during exam
+  useEffect(() => {
+    if (!examStarted) return
+
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      e.preventDefault()
+      e.returnValue = '' // Required for Chrome
+      return '' // Required for some browsers
+    }
+
+    window.addEventListener('beforeunload', handleBeforeUnload)
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload)
+    }
+  }, [examStarted])
+
+  // Inactivity monitoring (keep this)
+>>>>>>> Stashed changes
   useEffect(() => {
     if (!examStarted) return
 
     const checkInactivity = setInterval(() => {
       const timeSinceLastActivity = Date.now() - lastActivity
       if (timeSinceLastActivity > 300000) {
-        // 5 minutes
         logViolation("INACTIVITY", "Student inactive for more than 5 minutes")
       }
-    }, 60000) // Check every minute
+    }, 60000)
 
     return () => clearInterval(checkInactivity)
   }, [examStarted, lastActivity, logViolation])
-
-  // Timer
-  useEffect(() => {
-    if (!examStarted) return
-
-    const timer = setInterval(() => {
-      setTimeRemaining((prev) => {
-        if (prev <= 1) {
-          handleEndExam()
-          return 0
-        }
-        return prev - 1
-      })
-    }, 1000)
-
-    return () => clearInterval(timer)
-  }, [examStarted])
-
-  // Reference to iframe for script injection
-  const iframeRef = useRef<HTMLIFrameElement>(null)
 
   const handleStartExam = async () => {
     enterFullscreen()
     setExamStarted(true)
     updateActivity()
 
-    // Create exam session in database
     const studentData = localStorage.getItem("studentData")
     const student = studentData ? JSON.parse(studentData) : null
 
@@ -433,8 +392,7 @@ export default function ExamPage({ params }: { params: { examId: string } }) {
         console.log("[v0] Exam session created:", data)
 
         if (data.sessionId) {
-          // Store session ID for use in violation logging
-          localStorage.setItem("examSessionId", data.sessionId)
+          localStorage.setItem("examSessionId", data.sessionId.toString())
         }
       } catch (error) {
         console.error("[v0] Failed to create exam session:", error)
@@ -456,17 +414,9 @@ export default function ExamPage({ params }: { params: { examId: string } }) {
       description: "Your responses have been recorded.",
     })
 
-    // Redirect back to dashboard
     setTimeout(() => {
-      router.push("/student/dashboard")
+      router.push("/")
     }, 2000)
-  }
-
-  const formatTime = (seconds: number) => {
-    const hours = Math.floor(seconds / 3600)
-    const minutes = Math.floor((seconds % 3600) / 60)
-    const secs = seconds % 60
-    return `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`
   }
 
   if (showWarning) {
@@ -539,14 +489,12 @@ export default function ExamPage({ params }: { params: { examId: string } }) {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* CSS for interaction protection */}
       <style jsx>{`
         body {
           -webkit-app-region: no-drag;
           overflow-x: hidden;
         }
         
-        /* Allow normal interaction with form elements */
         input, textarea, select, button, label, a {
           -webkit-user-select: auto;
           -moz-user-select: auto;
@@ -555,7 +503,10 @@ export default function ExamPage({ params }: { params: { examId: string } }) {
         }
       `}</style>
 
+<<<<<<< Updated upstream
       {/* Proctoring Header - Minimal */}
+=======
+>>>>>>> Stashed changes
       <div className="fixed top-0 left-0 right-0 bg-red-600 text-white px-4 py-2 flex items-center justify-between z-40 h-14">
         <div className="flex items-center gap-2">
           <Eye className="h-4 w-4" />
@@ -571,7 +522,10 @@ export default function ExamPage({ params }: { params: { examId: string } }) {
         </Button>
       </div>
 
+<<<<<<< Updated upstream
       {/* Exam Content - Full Screen */}
+=======
+>>>>>>> Stashed changes
       <div className="fixed inset-0 top-14 bg-white overflow-hidden">
         {isBlocked ? (
           <div className="flex items-center justify-center h-full">
